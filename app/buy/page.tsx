@@ -137,7 +137,12 @@ export default function BuyPage() {
       if (response.ok) {
         const data = await response.json();
         if (data && data.length > 0) {
-          setProducts(data);
+          // Convert prices from string to number if needed
+          const productsWithNumbers = data.map((p: any) => ({
+            ...p,
+            price: typeof p.price === 'string' ? parseFloat(p.price) : p.price
+          }));
+          setProducts(productsWithNumbers);
         }
       }
     } catch (error) {
@@ -296,7 +301,7 @@ export default function BuyPage() {
 
                             {/* Price */}
                             <div className="text-center mb-4">
-                              <span className="text-white text-3xl font-bold">${product.price.toFixed(2)}</span>
+                              <span className="text-white text-3xl font-bold">${parseFloat(product.price as any).toFixed(2)}</span>
                             </div>
 
                             {/* Description */}
