@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/init-db-vercel.js && next build",
+    "build": "next build",
     "start": "next start",
     "init-db": "node scripts/init-products.js",
-    "init-faqs": "node scripts/init-faqs.js",
-    "postinstall": "node scripts/init-db-vercel.js"
+    "init-faqs": "node scripts/init-faqs.js"
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.5.3",
