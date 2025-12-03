@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --font-montserrat: var(--font-montserrat);
+  --font-inter: var(--font-inter);
+}
+
+:root {
+  /* LactoClear Color Palette */
+  --black: #000000;
+  --electric-blue: #00A3E8;
+  --emerald-green: #00D036;
+  --flame-orange: #FF7A00;
+  --bright-yellow: #FFD400;
+  --silver: #9FA4A6;
+  --white: #FFFFFF;
+  --soft-white: #F2F2F2;
+  --dark-charcoal: #0D0D0D;
+  --card-bg: #111111;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #9FA4A6;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00A3E8;
+}
+
+/* Hide scrollbar for horizontal galleries on mobile */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
