@@ -60,7 +60,12 @@ export default function ProductsAdminPage() {
       const response = await fetch('/api/admin/products');
       if (response.ok) {
         const data = await response.json();
-        setProducts(data);
+        // Convert prices from string to number
+        const productsWithNumbers = data.map((p: any) => ({
+          ...p,
+          price: typeof p.price === 'string' ? parseFloat(p.price) : p.price
+        }));
+        setProducts(productsWithNumbers);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -528,7 +533,7 @@ export default function ProductsAdminPage() {
                         <div className="flex items-center space-x-6 text-sm">
                           <div className="flex items-center space-x-2">
                             <DollarSign className="w-4 h-4 text-[#00D036]" />
-                            <span className="text-white font-semibold">${product.price.toFixed(2)}</span>
+                            <span className="text-white font-semibold">${parseFloat(product.price as any).toFixed(2)}</span>
                           </div>
                           {product.color && (
                             <div className="flex items-center space-x-2">
