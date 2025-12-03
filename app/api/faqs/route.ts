@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getEnabledFAQs } from '@/lib/database';
+import { getEnabledFAQs } from '@/lib/database-neon';
 
 // Fallback FAQs for when database isn't available
 const fallbackFAQs = [
@@ -20,7 +20,7 @@ export async function GET() {
     let faqs;
     
     try {
-      faqs = getEnabledFAQs();
+      faqs = await getEnabledFAQs();
       
       // If we got FAQs from DB, use them
       if (faqs.length > 0) {

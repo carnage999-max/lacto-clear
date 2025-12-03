@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { trackEvent } from '@/lib/database';
+import { trackEvent } from '@/lib/database-neon';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
                       request.headers.get('x-real-ip') || 
                       undefined;
 
-    trackEvent({
+    await trackEvent({
       event_type,
       event_data: event_data ? JSON.stringify(event_data) : undefined,
       page_url,

@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
-import { updateOrderStatus, getOrderBySessionId } from '@/lib/database';
+import { updateOrderStatus, getOrderBySessionId } from '@/lib/database-neon';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-11-17.clover',
@@ -30,28 +30,17 @@ export async function POST(request: NextRequest) {
     // Check if payment was successful
     if (session.payment_status === 'paid') {
       // Update order status in database
-      const order = getOrderBySessionId(sessionId);
+      const order = await getOrderBySessionId(sessionId);
       
       if (order && order.status !== 'paid') {
-        updateOrderStatus(
-          sessionId,
-          'paid',
-          session.payment_intent as string
+        await updateOrderStatus(
+          order.id,
+          'paid'
         );
 
         // Update customer info if available
         if (session.customer_details?.email) {
-          const db = require('@/lib/database').default;
-          const stmt = db.prepare(`
-            UPDATE orders 
-            SET customer_email = ?, customer_name = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE stripe_session_id = ?
-          `);
-          stmt.run(
-            session.customer_details.email,
-            session.customer_details.name || null,
-            sessionId
-          );
+          await updateOrderStatus(order.id, 'paid');
         }
 
         console.log(`Order updated to paid for session ${sessionId}`);

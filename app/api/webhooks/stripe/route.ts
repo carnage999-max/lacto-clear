@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
-import { updateOrderStatus, createShippingAddress, getOrderBySessionId } from '@/lib/database';
+import { updateOrderStatus, createShippingAddress, getOrderBySessionId } from '@/lib/database-neon';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-11-17.clover',
@@ -32,36 +32,17 @@ export async function POST(request: NextRequest) {
         
         console.log('Payment successful for session:', session.id);
 
-        // Update order status
-        updateOrderStatus(
-          session.id,
-          'paid',
-          session.payment_intent as string
-        );
-
-        // Get the order to add customer details
-        const order = getOrderBySessionId(session.id);
+        // Get the order to update status
+        const order = await getOrderBySessionId(session.id);
         if (order) {
-          // Update customer info if available
-          if (session.customer_details?.email) {
-            const db = require('@/lib/database').default;
-            const stmt = db.prepare(`
-              UPDATE orders 
-              SET customer_email = ?, customer_name = ?, updated_at = CURRENT_TIMESTAMP
-              WHERE stripe_session_id = ?
-            `);
-            stmt.run(
-              session.customer_details.email,
-              session.customer_details.name || null,
-              session.id
-            );
-          }
+          // Update order status
+          await updateOrderStatus(order.id, 'paid');
 
           // Save shipping address if available
-          const shippingAddress = (session as any).shipping_address;
+          const shippingAddress = (session as any).shipping_details?.address;
           if (shippingAddress) {
-            createShippingAddress({
-              order_id: order.id!,
+            await createShippingAddress({
+              order_id: order.id,
               name: (session as any).shipping_details?.name || null,
               address_line1: shippingAddress.line1 || null,
               address_line2: shippingAddress.line2 || null,
@@ -78,19 +59,28 @@ export async function POST(request: NextRequest) {
 
       case 'checkout.session.async_payment_succeeded': {
         const session = event.data.object as Stripe.Checkout.Session;
-        updateOrderStatus(session.id, 'paid', session.payment_intent as string);
+        const order = await getOrderBySessionId(session.id);
+        if (order) {
+          await updateOrderStatus(order.id, 'paid');
+        }
         break;
       }
 
       case 'checkout.session.async_payment_failed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        updateOrderStatus(session.id, 'failed');
+        const order = await getOrderBySessionId(session.id);
+        if (order) {
+          await updateOrderStatus(order.id, 'failed');
+        }
         break;
       }
 
       case 'checkout.session.expired': {
         const session = event.data.object as Stripe.Checkout.Session;
-        updateOrderStatus(session.id, 'expired');
+        const order = await getOrderBySessionId(session.id);
+        if (order) {
+          await updateOrderStatus(order.id, 'expired');
+        }
         break;
       }
 

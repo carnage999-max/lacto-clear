@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
-import { getOrderStats } from '@/lib/database';
+import { getOrderStats } from '@/lib/database-neon';
 
 export async function GET() {
   const authenticated = await isAuthenticated();
@@ -13,7 +13,7 @@ export async function GET() {
   }
 
   try {
-    const stats = getOrderStats();
+    const stats = await getOrderStats();
     return NextResponse.json(stats);
   } catch (error) {
     console.error('Error fetching stats:', error);

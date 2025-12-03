@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
-import { getAnalytics } from '@/lib/database';
+import { getAnalytics } from '@/lib/database-neon';
 
 export async function GET(request: NextRequest) {
   const authenticated = await isAuthenticated();
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const startDate = searchParams.get('start_date') || undefined;
     const endDate = searchParams.get('end_date') || undefined;
 
-    const analytics = getAnalytics(startDate, endDate);
+    const analytics = await getAnalytics(startDate, endDate);
     return NextResponse.json(analytics);
   } catch (error) {
     console.error('Error fetching analytics:', error);

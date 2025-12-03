@@ -11,7 +11,7 @@ import {
   deleteTestimonial,
   getSetting,
   setSetting
-} from '@/lib/database';
+} from '@/lib/database-neon';
 
 // FAQs
 export async function GET(request: NextRequest) {
@@ -29,14 +29,14 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
 
     if (type === 'faqs') {
-      const faqs = getAllFAQs();
+      const faqs = await getAllFAQs();
       return NextResponse.json(faqs);
     } else if (type === 'testimonials') {
-      const testimonials = getAllTestimonials();
+      const testimonials = await getAllTestimonials();
       return NextResponse.json(testimonials);
     } else if (type === 'settings') {
-      const heroTitle = getSetting('hero_title') || 'CLEARING THE PATH FOR PEAK RECOVERY';
-      const heroSubtext = getSetting('hero_subtext') || 'Break through the lactate barrier. Restore metabolic balance. Unlock your body\'s natural recovery potential with the LactoClear® system.';
+      const heroTitle = await getSetting('hero_title') || 'CLEARING THE PATH FOR PEAK RECOVERY';
+      const heroSubtext = await getSetting('hero_subtext') || 'Break through the lactate barrier. Restore metabolic balance. Unlock your body\'s natural recovery potential with the LactoClear® system.';
       
       return NextResponse.json({ heroTitle, heroSubtext });
     }
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      createFAQ({
+      await createFAQ({
         category,
         question,
         answer,
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      createTestimonial({
+      await createTestimonial({
         name,
         location: location || null,
         rating: rating || 5,
@@ -110,8 +110,8 @@ export async function POST(request: NextRequest) {
     } else if (type === 'settings') {
       const { heroTitle, heroSubtext } = body;
       
-      if (heroTitle) setSetting('hero_title', heroTitle);
-      if (heroSubtext) setSetting('hero_subtext', heroSubtext);
+      if (heroTitle) await setSetting('hero_title', heroTitle);
+      if (heroSubtext) await setSetting('hero_subtext', heroSubtext);
 
       return NextResponse.json({ success: true });
     }
@@ -156,7 +156,7 @@ export async function PUT(request: NextRequest) {
       if (updates.sort_order !== undefined) updateData.sort_order = updates.sort_order;
       if (updates.enabled !== undefined) updateData.enabled = updates.enabled ? 1 : 0;
 
-      updateFAQ(id, updateData);
+      await updateFAQ(id, updateData);
       return NextResponse.json({ success: true });
     } else if (type === 'testimonial') {
       if (!id) {
@@ -176,7 +176,7 @@ export async function PUT(request: NextRequest) {
       if (updates.enabled !== undefined) updateData.enabled = updates.enabled ? 1 : 0;
       if (updates.sort_order !== undefined) updateData.sort_order = updates.sort_order;
 
-      updateTestimonial(id, updateData);
+      await updateTestimonial(id, updateData);
       return NextResponse.json({ success: true });
     }
 
@@ -213,10 +213,10 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (type === 'faq') {
-      deleteFAQ(parseInt(id));
+      await deleteFAQ(parseInt(id));
       return NextResponse.json({ success: true });
     } else if (type === 'testimonial') {
-      deleteTestimonial(parseInt(id));
+      await deleteTestimonial(parseInt(id));
       return NextResponse.json({ success: true });
     }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getEnabledProducts } from '@/lib/database';
+import { getEnabledProducts } from '@/lib/database-neon';
 
 // Fallback products for when database isn't available (e.g., Vercel Edge)
 const fallbackProducts = [
@@ -65,10 +65,10 @@ export async function GET() {
     let products;
     
     try {
-      products = getEnabledProducts();
+      products = await getEnabledProducts();
       
       // Parse features JSON for each product
-      const productsWithFeatures = products.map(product => ({
+      const productsWithFeatures = products.map((product: any) => ({
         ...product,
         features: product.features ? JSON.parse(product.features) : []
       }));

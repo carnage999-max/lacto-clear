@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
-import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct, Product } from '@/lib/database';
+import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct, Product } from '@/lib/database-neon';
 
 export async function GET(request: NextRequest) {
   const authenticated = await isAuthenticated();
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (id) {
-      const product = getProductById(id);
+      const product = await getProductById(id);
       if (!product) {
         return NextResponse.json(
           { error: 'Product not found' },
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(product);
     }
 
-    const products = getAllProducts();
+    const products = await getAllProducts();
     return NextResponse.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    createProduct({
+    await createProduct({
       id,
       name,
       price: parseFloat(price),
@@ -103,7 +103,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const product = getProductById(id);
+    const product = await getProductById(id);
     if (!product) {
       return NextResponse.json(
         { error: 'Product not found' },
@@ -111,7 +111,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const updateData: Partial<Product> = {};
+    const updateData: any = {};
     
     if (updates.name !== undefined) updateData.name = updates.name;
     if (updates.price !== undefined) updateData.price = parseFloat(updates.price);
@@ -123,7 +123,7 @@ export async function PUT(request: NextRequest) {
     if (updates.enabled !== undefined) updateData.enabled = updates.enabled ? 1 : 0;
     if (updates.sort_order !== undefined) updateData.sort_order = updates.sort_order;
 
-    updateProduct(id, updateData);
+    await updateProduct(id, updateData);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -156,7 +156,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    deleteProduct(id);
+    await deleteProduct(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting product:', error);

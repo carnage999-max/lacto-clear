@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
-import { getProductAnalytics } from '@/lib/database';
+import { getProductAnalytics } from '@/lib/database-neon';
 
 export async function GET() {
   const authenticated = await isAuthenticated();
@@ -13,7 +13,7 @@ export async function GET() {
   }
 
   try {
-    const analytics = getProductAnalytics();
+    const analytics = await getProductAnalytics();
     return NextResponse.json(analytics);
   } catch (error) {
     console.error('Error fetching product analytics:', error);

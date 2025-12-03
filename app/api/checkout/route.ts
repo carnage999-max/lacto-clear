@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
-import { createOrder, createOrderItems } from '@/lib/database';
+import { createOrder, createOrderItems } from '@/lib/database-neon';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-11-17.clover',
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 
     // Save order to database
     try {
-      const orderId = createOrder({
+      const orderId = await createOrder({
         stripe_session_id: session.id,
         amount_total: amountTotal,
         currency: 'usd',
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         price: Math.round(item.price * 100),
       }));
 
-      createOrderItems(orderId as number, orderItems);
+      await createOrderItems(orderId?.id || orderId, orderItems);
 
       console.log(`Order ${orderId} created for session ${session.id}`);
     } catch (dbError) {

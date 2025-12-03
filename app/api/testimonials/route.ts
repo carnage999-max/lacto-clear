@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getEnabledTestimonials } from '@/lib/database';
+import { getEnabledTestimonials } from '@/lib/database-neon';
 
 export async function GET() {
   try {
     let testimonials;
     
     try {
-      testimonials = getEnabledTestimonials();
+      testimonials = await getEnabledTestimonials();
       
       // If we got testimonials from DB, use them
       if (testimonials.length > 0) {
