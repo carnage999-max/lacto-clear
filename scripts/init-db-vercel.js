@@ -1,14 +1,8 @@
 const Database = require('better-sqlite3');
 const path = require('path');
-const fs = require('fs');
 
-// Create db directory if it doesn't exist
-const dbDir = path.join(process.cwd(), 'data');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-
-const dbPath = path.join(dbDir, 'lacto-clear.db');
+// Use the same path as lib/database.ts
+const dbPath = path.join(process.cwd(), 'lacto-clear.db');
 const db = new Database(dbPath);
 
 console.log('🗄️  Initializing database for Vercel deployment...');
