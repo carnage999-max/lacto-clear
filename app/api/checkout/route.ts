@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
 
     // Save order to database
     try {
-      const orderId = await createOrder({
+      const order = await createOrder({
         stripe_session_id: session.id,
-        amount_total: amountTotal,
+        total_amount: amountTotal,
         currency: 'usd',
         status: 'pending',
       });
@@ -64,9 +64,9 @@ export async function POST(request: NextRequest) {
         price: Math.round(item.price * 100),
       }));
 
-      await createOrderItems(orderId?.id || orderId, orderItems);
+      await createOrderItems(order.id, orderItems);
 
-      console.log(`Order ${orderId} created for session ${session.id}`);
+      console.log(`Order ${order.id} created for session ${session.id}`);
     } catch (dbError) {
       console.error('Database error:', dbError);
       // Continue even if database fails - payment is more important

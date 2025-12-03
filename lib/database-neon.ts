@@ -19,12 +19,12 @@ export interface Product {
 // Create connection pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // Neon requires SSL
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  // Neon requires SSL - enable for all environments when using Neon
+  ssl: { rejectUnauthorized: false },
   // Connection pool settings
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 10000, // Increased timeout for Neon cold starts
 });
 
 // Initialize schema on startup
