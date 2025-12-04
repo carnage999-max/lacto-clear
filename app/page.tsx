@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { Shield, Zap, Activity, ArrowRight, Droplet, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+// Force static generation
+export const dynamic = 'force-static';
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-black pt-20 overflow-x-hidden">
