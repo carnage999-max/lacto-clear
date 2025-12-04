@@ -144,6 +144,25 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Warburg Effect Section */}
+      <section className="py-20 bg-black border-y border-[#9FA4A6]/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold font-montserrat text-white mb-8">
+              <span className="text-[#FF7A00]">WARBURG EFFECT</span>
+            </h2>
+            <p className="text-lg text-[#F2F2F2] leading-relaxed space-y-6">
+              Tumors rely on an altered form of metabolism known as the Warburg effect, which causes them to produce large amounts of lactic acid. This lactic acid accumulates in the tumor microenvironment and creates an acidic barrier that weakens the body's natural immune response. The same acidic conditions also support the tumor's ability to survive, adapt, and spread. In this way, the metabolic byproducts of the Warburg effect both shield the tumor from attack.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Why the Lacto Shield Matters Section */}
       <section className="py-20 bg-black overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
