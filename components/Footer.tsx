@@ -76,6 +76,18 @@ export default function Footer() {
               These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.
             </p>
           </div>
+          <p className="mt-4 text-center text-sm text-[#9FA4A6]">
+            Part of the{" "}
+            <a
+              href="https://se7eninc.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#00A3E8] transition-colors underline"
+            >
+              Se7en
+            </a>{" "}
+            family of companies.
+          </p>
         </div>
       </div>
     </footer>
