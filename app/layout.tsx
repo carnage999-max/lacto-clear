@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import FloatingCartButton from "@/components/FloatingCartButton";
 import CartDrawer from "@/components/CartDrawer";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import Script from "next/script";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -119,6 +120,11 @@ export default function RootLayout({
           <FloatingCartButton />
           <CartDrawer />
         </CartProvider>
+        <Script
+          src="https://now-hiring-eta.vercel.app/widget.js"
+          data-icon="Activity"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
