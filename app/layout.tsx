@@ -121,7 +121,7 @@ export default function RootLayout({
           <CartDrawer />
         </CartProvider>
         <Script
-          src="https://now-hiring-eta.vercel.app/widget.js"
+          src="https://hiring.se7eninc.com/widget.js"
           data-icon="Activity"
           strategy="afterInteractive"
         />
